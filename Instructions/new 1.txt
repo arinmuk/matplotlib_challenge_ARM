@@ -1,0 +1,72 @@
+unique_items = purchase_data.groupby(["Item ID"]).unique().count()
+avg_price = purchase_data["Price"].mean()
+purchases = purchase_data["Purchase ID"].count()
+revenue = purchase_data["Price"].sum()
+pur_analysis = pd.DataFrame([
+    {"Number of Unique Items":unique_items},
+{"Avaerage Price":avg_price},
+    {"Number of Purchases":purchases},
+    {"Total Revenue":revenue},
+])
+pur_analysis
+
+
+
+g_sum=gender_grp_fr["Gender"].value_counts()
+gender_summary=pd.DataFrame(g_sum)
+gender_summary.reset_index(drop=True)
+gender_summary.head()
+
+
+#gender_count_df.head()
+#total_count=purchase_data["Gender"].count()
+#total_count
+
+#gender_count=gender_grp_fr["Gender"].value_counts()
+#gender_count_df= pd.DataFrame(gender_count)
+
+#gender_count_df.head()
+#gender_count_df.reset_index(drop=True)
+
+#Male_count = gender_fr.loc[(gender_fr["Gender"]=="Male")]
+#gender_grp_fr=gender_fr.groupby(["Gender"])
+#gender_grp_fr.head().unique()
+#g_sum=gender_grp_fr["Gender"].value_counts()
+#g_sum.head()
+#gender_summary=pd.DataFrame(g_sum)
+#g_sum.head()
+#gender_summary.head()
+
+
+
+
+df=pd.DataFrame(vc)
+df["Percentage of Player"]=(df["SN"]/total_count)*100
+df.head()
+
+
+
+
+
+
+bins = [0, 9, 14, 19, 24, 29,34,39,100]
+
+# Create the names for the four bins
+
+
+group_names = ["<10", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39","40+"]
+work_pur["Player Age Summary"] = pd.cut(purchase_data["Age"], bins, labels=group_names)
+work_pur_grp=work_pur.groupby(["Player Age Summary"],as_index=False)
+#work_pur_grp.count()
+summary_inter= work_pur_grp.count()
+summary_result=summary_inter[["Player Age Summary","SN"]]
+summary_result=summary_result.rename(columns={"SN":"Total Count"})
+summary_result["Percentage of Players"]=(summary_result["Total Count"]/tot_player)*100
+summary_result.head(12)
+
+
+
+
+#purchase_sumry=purchase_group.groupby(["Player Age Summary"])
+# Find how many rows fall into each bin
+#print(purchase_sumry["Age"].count())

@@ -1,0 +1,24 @@
+work_pur=purchase_data
+
+tot_player=work_pur["Age"].count()
+bins = [0, 9, 14, 19, 24, 29,34,39,100]
+
+# Create the names for the four bins
+#summary_result["Player Age Summary","Total Count"]
+
+group_names = ["<10", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39","40+"]
+work_pur["Player Age Summary"] = pd.cut(purchase_data["Age"], bins, labels=group_names)
+work_pur_grp=work_pur.groupby(["Player Age Summary"],as_index=False)["Purchase ID"].count()
+work_pur_grp=work_pur_grp.rename(columns={"Purchase ID":"Purchase Count"})
+work_pur_grp_avg=work_pur.groupby(["Player Age Summary"],as_index=False)["Price"].mean()
+work_pur_grp_avg=work_pur_grp_avg.rename(columns={"Price":"Average Purchase Price"})
+work_pur_grp_sum=work_pur.groupby(["Player Age Summary"],as_index=False)["Price"].sum()
+work_pur_grp_sum=work_pur_grp_sum.rename(columns={"Price":"Total Purchase Value"})
+new_f1 = pd.concat([work_pur_grp,work_pur_grp_avg["Average Purchase Price"],work_pur_grp_sum["Total Purchase Value"],(work_pur_grp_sum["Total Purchase Value"]/summary_result["Total Count"])],axis=1)
+
+#summary_inter= work_pur_grp
+#summary_result=summary_inter[["Player Age Summary"]]
+#summary_result.head(12)
+#work_pur_grp_sum.head(18)
+###new_f1.head(18)
+sum_df.head()

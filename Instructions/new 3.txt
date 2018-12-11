@@ -1,0 +1,58 @@
+pymoli
+
+player count
+
+purchase_grpby=purchase_data.groupby(["SN"])
+t_players= purchase_grpby['SN'].unique().count()
+total_players = pd.DataFrame([{"Total Players":t_players}])
+total_players
+
+Purchasing Analysis (Total)
+
+
+
+Gender demo graphics
+vcounts=purchase_data[["SN","Gender"]]
+vcounts["Gender"].value_counts()
+male_df = vcounts.loc[vcounts["Gender"] == "Male", :]
+female_df=vcounts.loc[vcounts["Gender"] == "Female", :]
+other_df=vcounts.loc[vcounts["Gender"] == "Other / Non-Disclosed", :]
+male_count=len(male_df.groupby(["SN","Gender"])["SN"].count())
+female_count=len(female_df.groupby(["SN","Gender"])["SN"].count())
+other_count=len(other_df.groupby(["SN","Gender"])["SN"].count())
+
+total_unique_SN=male_count+female_count+other_count
+p_male=(male_count/total_unique_SN)*100
+p_female=(female_count/total_unique_SN)*100
+p_other=(other_count/total_unique_SN)*100
+summary={"":["Male","Female","Other / Non-Disclosed"],
+         "Total Count":[male_count,female_count,other_count],
+         "Percentage of Players":[p_male,p_female,p_other]
+        }
+results_fr=pd.DataFrame(summary).round(2)
+results_fr.head()
+
+
+
+==========purchase analysis
+
+purchase_df=purchase_data.groupby(["Gender"],as_index=False)["Purchase ID"].count()
+purchase_df=purchase_df.rename(columns={"Purchase ID":"Purchase Count"})
+avg_df=purchase_data.groupby(["Gender"],as_index=False)["Price"].mean()
+
+avg_df["Price"]=avg_df["Price"].map("${:.2f}".format)
+avg_df=avg_df.rename(columns={"Price":"Average Purchase Price"})
+
+tot_pur_df=purchase_data.groupby(["Gender"],as_index=False)["Price"].sum()
+tot_pur_df["Price"]=tot_pur_df["Price"].map("${:,.2f}".format)
+tot_pur_df=tot_pur_df.rename(columns={"Price":"Total Purchase Value"})
+
+avg_pur_per_df= purchase_data.groupby(["SN","Gender"],as_index=False)["Price"].sum()
+sum_avg_df=avg_pur_per_df.groupby("Gender",as_index=False)["Price"].mean()
+sum_avg_df["Price"]=sum_avg_df["Price"].map("${:.2f}".format)
+sum_avg_df=sum_avg_df.rename(columns={"Price":"Avg Total Purchase per Person"})
+sum_avg_df.head()
+new_f1 = pd.concat([purchase_df,avg_df["Average Purchase Price"],tot_pur_df["Total Purchase Value"],sum_avg_df["Avg Total Purchase per Person"]],axis=1)
+summary_df = new_f1.round(2)
+#new_f1.head()
+summary_df.head()
